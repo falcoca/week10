@@ -79,6 +79,15 @@ end
 post "/rsvps/:id/update" do
     puts "params: #{params}"
 
+    # first find the rsvp that is being edited
+    @rsvp = rsvps_table.where(id: params["id"]).to_a[0]
+    @event = events_table.where(id: @rsvp[:event_id]).to_a[0]
+    # if @current_user && @current_user[:id] == rsvp[:user_id]
+    rsvps_table.where(id: params["id"]).update(
+            comments: params["comments"],
+            going: params["going"]
+    )
+
     view "update_rsvp"
 end
 
@@ -141,3 +150,6 @@ get "/logout" do
     session["user_id"] = nil
     view "logout"
 end
+
+# get "/send_text"
+#     TWILIO_ACCOUNT_SID
